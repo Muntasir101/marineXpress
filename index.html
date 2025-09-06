@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarineXpress | Shipping Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #0f172a;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--secondary);
+            color: white;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .menu {
+            list-style: none;
+        }
+        
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.8rem 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-link:hover, .menu-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .menu-link i {
+            font-size: 1.2rem;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        
+        .icon-primary {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+        
+        .icon-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .icon-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .icon-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Section Styles */
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .status-inactive {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-right: 0.7rem;
+            transition: color 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+        }
+        
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Tabs for Section Navigation */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .menu {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .menu-item {
+                margin-bottom: 0;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .user-info {
+                align-self: flex-end;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            background-color: var(--success);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--light-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-ship"></i>
+                <h1>MarineXpress</h1>
+            </div>
+            
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="#" class="menu-link active" data-tab="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" data-tab="fleet">
+                        <i class="fas fa-ship"></i>
+                        <span>Fleet Management</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link" data-tab="cargo">
+                        <i class="fas fa-box"></i>
+                        <span>Cargo Operations</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h2 class="page-title">Shipping Management Dashboard</h2>
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <div>John Doe</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Admin</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Content -->
+            <div class="tab-content active" id="dashboard">
+                <!-- Dashboard Stats -->
+                <div class="dashboard-cards">
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-primary">
+                            <i class="fas fa-ship"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-vessels">0</h3>
+                            <p>Total Vessels</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-success">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-cargos">0</h3>
+                            <p>Total Cargo Bookings</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-warning">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pending-ops">0</h3>
+                            <p>Pending Operations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="issues">0</h3>
+                            <p>Issues Reported</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Vessels -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Recent Vessels</h3>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="recent-vessels-table">
+                            <thead>
+                                <tr>
+                                    <th>Vessel Name</th>
+                                    <th>Type</th>
+                                    <th>Capacity (TEU)</th>
+                                    <th>Current Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Recent Cargo Bookings -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Recent Cargo Bookings</h3>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="recent-cargos-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Cargo Type</th>
+                                    <th>Weight (tons)</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fleet Management Section -->
+            <div class="tab-content" id="fleet">
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Vessel Registry</h3>
+                        <button class="btn btn-primary" id="add-vessel-btn">
+                            <i class="fas fa-plus"></i> Register New Vessel
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="vessels-table">
+                            <thead>
+                                <tr>
+                                    <th>Vessel Name</th>
+                                    <th>Type</th>
+                                    <th>Capacity (TEU)</th>
+                                    <th>Current Location</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cargo Operations Section -->
+            <div class="tab-content" id="cargo">
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Cargo Bookings</h3>
+                        <button class="btn btn-primary" id="add-cargo-btn">
+                            <i class="fas fa-plus"></i> New Booking
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="cargos-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Cargo Type</th>
+                                    <th>Weight (tons)</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Loading/Unloading Operations</h3>
+                        <button class="btn btn-primary" id="add-operation-btn">
+                            <i class="fas fa-plus"></i> New Operation
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="operations-table">
+                            <thead>
+                                <tr>
+                                    <th>Operation ID</th>
+                                    <th>Vessel</th>
+                                    <th>Type</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Vessel Modal -->
+    <div class="modal" id="vessel-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-vessel-modal">&times;</button>
+            <h2 class="section-title" id="vessel-modal-title">Register New Vessel</h2>
+            
+            <form id="vessel-form">
+                <input type="hidden" id="vessel-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Vessel Name *</label>
+                        <input type="text" class="form-input" id="vessel-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Vessel Type *</label>
+                        <select class="form-select" id="vessel-type" required>
+                            <option value="">Select Type</option>
+                            <option value="Container Ship">Container Ship</option>
+                            <option value="Bulk Carrier">Bulk Carrier</option>
+                            <option value="Tanker">Tanker</option>
+                            <option value="Ro-Ro">Ro-Ro</option>
+                            <option value="General Cargo">General Cargo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">IMO Number *</label>
+                        <input type="text" class="form-input" id="vessel-imo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Capacity (TEU) *</label>
+                        <input type="number" class="form-input" id="vessel-capacity" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Year Built *</label>
+                        <input type="number" class="form-input" id="vessel-year" min="1900" max="2030" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Current Location *</label>
+                        <input type="text" class="form-input" id="vessel-location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <select class="form-select" id="vessel-status" required>
+                            <option value="Active">Active</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Vessel</button>
+                <button type="button" class="btn btn-secondary" id="cancel-vessel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cargo Modal -->
+    <div class="modal" id="cargo-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-cargo-modal">&times;</button>
+            <h2 class="section-title" id="cargo-modal-title">New Cargo Booking</h2>
+            
+            <form id="cargo-form">
+                <input type="hidden" id="cargo-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Cargo Type *</label>
+                        <select class="form-select" id="cargo-type" required>
+                            <option value="">Select Type</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Agricultural Products">Agricultural Products</option>
+                            <option value="Automotive Parts">Automotive Parts</option>
+                            <option value="Chemicals">Chemicals</option>
+                            <option value="Consumer Goods">Consumer Goods</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Weight (tons) *</label>
+                        <input type="number" class="form-input" id="cargo-weight" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Origin *</label>
+                        <input type="text" class="form-input" id="cargo-origin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Destination *</label>
+                        <input type="text" class="form-input" id="cargo-destination" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Vessel *</label>
+                        <select class="form-select" id="cargo-vessel" required>
+                            <option value="">Select Vessel</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <select class="form-select" id="cargo-status" required>
+                            <option value="Booked">Booked</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="On Hold">On Hold</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Booking</button>
+                <button type="button" class="btn btn-secondary" id="cancel-cargo">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Operation Modal -->
+    <div class="modal" id="operation-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-operation-modal">&times;</button>
+            <h2 class="section-title" id="operation-modal-title">New Operation</h2>
+            
+            <form id="operation-form">
+                <input type="hidden" id="operation-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Vessel *</label>
+                        <select class="form-select" id="operation-vessel" required>
+                            <option value="">Select Vessel</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Operation Type *</label>
+                        <select class="form-select" id="operation-type" required>
+                            <option value="Loading">Loading</option>
+                            <option value="Unloading">Unloading</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Start Time *</label>
+                        <input type="datetime-local" class="form-input" id="operation-start" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Estimated Completion *</label>
+                        <input type="datetime-local" class="form-input" id="operation-end" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <select class="form-select" id="operation-status" required>
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Delayed">Delayed</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Cargo Details</label>
+                    <textarea class="form-textarea" id="operation-details" rows="3" placeholder="Enter cargo details"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Operation</button>
+                <button type="button" class="btn btn-secondary" id="cancel-operation">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Operation completed successfully</span>
+    </div>
+
+    <script>
+        // Data management
+        let vessels = JSON.parse(localStorage.getItem('vessels')) || [];
+        let cargos = JSON.parse(localStorage.getItem('cargos')) || [];
+        let operations = JSON.parse(localStorage.getItem('operations')) || [];
+
+        // DOM Elements
+        const vesselModal = document.getElementById('vessel-modal');
+        const cargoModal = document.getElementById('cargo-modal');
+        const operationModal = document.getElementById('operation-modal');
+        const toast = document.getElementById('toast');
+
+        // Initialize the application
+        function initApp() {
+            // Load initial data if empty
+            if (vessels.length === 0) {
+                loadSampleVessels();
+            }
+            if (cargos.length === 0) {
+                loadSampleCargos();
+            }
+            if (operations.length === 0) {
+                loadSampleOperations();
+            }
+            
+            // Render all data
+            renderVessels();
+            renderCargos();
+            renderOperations();
+            renderDashboard();
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        // Load sample vessels
+        function loadSampleVessels() {
+            vessels = [
+                { id: '1', name: 'Ocean Pioneer', type: 'Container Ship', imo: 'IMO1234567', capacity: 15000, year: 2018, location: 'Port of Shanghai', status: 'Active' },
+                { id: '2', name: 'Atlantic Carrier', type: 'Bulk Carrier', imo: 'IMO7654321', capacity: 8500, year: 2015, location: 'Port of Rotterdam', status: 'Active' },
+                { id: '3', name: 'Pacific Voyager', type: 'Container Ship', imo: 'IMO9876543', capacity: 12800, year: 2020, location: 'Port of Singapore', status: 'Maintenance' },
+                { id: '4', name: 'Mediterranean Spirit', type: 'Tanker', imo: 'IMO4567890', capacity: 18200, year: 2016, location: 'Port of Hamburg', status: 'Active' },
+                { id: '5', name: 'Indian Explorer', type: 'Container Ship', imo: 'IMO1357902', capacity: 14500, year: 2019, location: 'Port of Colombo', status: 'Active' }
+            ];
+            localStorage.setItem('vessels', JSON.stringify(vessels));
+        }
+
+        // Load sample cargos
+        function loadSampleCargos() {
+            cargos = [
+                { id: '1', type: 'Electronics', weight: 120, origin: 'Shanghai', destination: 'Los Angeles', vesselId: '1', status: 'Booked' },
+                { id: '2', type: 'Agricultural Products', weight: 350, origin: 'Buenos Aires', destination: 'Rotterdam', vesselId: '2', status: 'Pending' },
+                { id: '3', type: 'Automotive Parts', weight: 85, origin: 'Bremen', destination: 'Baltimore', vesselId: '3', status: 'In Transit' },
+                { id: '4', type: 'Chemicals', weight: 210, origin: 'Houston', destination: 'Antwerp', vesselId: '4', status: 'On Hold' },
+                { id: '5', type: 'Consumer Goods', weight: 175, origin: 'Shenzhen', destination: 'Hamburg', vesselId: '5', status: 'Delivered' }
+            ];
+            localStorage.setItem('cargos', JSON.stringify(cargos));
+        }
+
+        // Load sample operations
+        function loadSampleOperations() {
+            operations = [
+                { id: '1', vesselId: '1', type: 'Loading', start: '2023-06-15T08:00', end: '2023-06-15T16:00', status: 'Completed', details: 'Loading electronics cargo' },
+                { id: '2', vesselId: '2', type: 'Loading', start: '2023-06-16T09:00', end: '2023-06-17T12:00', status: 'In Progress', details: 'Loading agricultural products' },
+                { id: '3', vesselId: '3', type: 'Unloading', start: '2023-06-18T10:00', end: '2023-06-19T15:00', status: 'Scheduled', details: 'Unloading automotive parts' },
+                { id: '4', vesselId: '4', type: 'Loading', start: '2023-06-17T14:00', end: '2023-06-18T18:00', status: 'Delayed', details: 'Loading chemicals' }
+            ];
+            localStorage.setItem('operations', JSON.stringify(operations));
+        }
+
+        // Render vessels table
+        function renderVessels() {
+            const tbody = document.querySelector('#vessels-table tbody');
+            tbody.innerHTML = '';
+            
+            if (vessels.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-ship"></i>
+                            <p>No vessels registered</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            vessels.forEach(vessel => {
+                const statusClass = vessel.status === 'Active' ? 'status-active' : 
+                                  vessel.status === 'Maintenance' ? 'status-pending' : 'status-inactive';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vessel.name}</td>
+                    <td>${vessel.type}</td>
+                    <td>${vessel.capacity.toLocaleString()}</td>
+                    <td>${vessel.location}</td>
+                    <td><span class="status ${statusClass}">${vessel.status}</span></td>
+                    <td>
+                        <button class="action-btn edit-vessel" data-id="${vessel.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-vessel" data-id="${vessel.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.edit-vessel').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    editVessel(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-vessel').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    deleteVessel(id);
+                });
+            });
+        }
+
+        // Render cargos table
+        function renderCargos() {
+            const tbody = document.querySelector('#cargos-table tbody');
+            tbody.innerHTML = '';
+            
+            if (cargos.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-box"></i>
+                            <p>No cargo bookings</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            cargos.forEach(cargo => {
+                const vessel = vessels.find(v => v.id === cargo.vesselId);
+                const vesselName = vessel ? vessel.name : 'N/A';
+                
+                const statusClass = cargo.status === 'Booked' ? 'status-active' : 
+                                  cargo.status === 'In Transit' ? 'status-pending' : 
+                                  cargo.status === 'Delivered' ? 'status-active' : 'status-inactive';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>BK${cargo.id.padStart(6, '0')}</td>
+                    <td>${cargo.type}</td>
+                    <td>${cargo.weight}</td>
+                    <td>${cargo.origin}</td>
+                    <td>${cargo.destination}</td>
+                    <td><span class="status ${statusClass}">${cargo.status}</span></td>
+                    <td>
+                        <button class="action-btn edit-cargo" data-id="${cargo.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-cargo" data-id="${cargo.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.edit-cargo').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    editCargo(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-cargo').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    deleteCargo(id);
+                });
+            });
+        }
+
+        // Render operations table
+        function renderOperations() {
+            const tbody = document.querySelector('#operations-table tbody');
+            tbody.innerHTML = '';
+            
+            if (operations.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-sync-alt"></i>
+                            <p>No operations scheduled</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            operations.forEach(operation => {
+                const vessel = vessels.find(v => v.id === operation.vesselId);
+                const vesselName = vessel ? vessel.name : 'N/A';
+                
+                const statusClass = operation.status === 'Completed' ? 'status-active' : 
+                                  operation.status === 'In Progress' ? 'status-pending' : 
+                                  operation.status === 'Scheduled' ? 'status-active' : 'status-inactive';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>OP${operation.id.padStart(6, '0')}</td>
+                    <td>${vesselName}</td>
+                    <td>${operation.type}</td>
+                    <td>${formatDateTime(operation.start)}</td>
+                    <td>${formatDateTime(operation.end)}</td>
+                    <td><span class="status ${statusClass}">${operation.status}</span></td>
+                    <td>
+                        <button class="action-btn edit-operation" data-id="${operation.id}"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-operation" data-id="${operation.id}"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.edit-operation').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    editOperation(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-operation').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    deleteOperation(id);
+                });
+            });
+        }
+
+        // Render dashboard
+        function renderDashboard() {
+            // Update stats
+            document.getElementById('total-vessels').textContent = vessels.length;
+            document.getElementById('total-cargos').textContent = cargos.length;
+            document.getElementById('pending-ops').textContent = operations.filter(op => op.status === 'Scheduled' || op.status === 'In Progress').length;
+            document.getElementById('issues').textContent = operations.filter(op => op.status === 'Delayed').length;
+            
+            // Render recent vessels
+            const recentVessels = vessels.slice(0, 3);
+            const recentVesselsTbody = document.querySelector('#recent-vessels-table tbody');
+            recentVesselsTbody.innerHTML = '';
+            
+            recentVessels.forEach(vessel => {
+                const statusClass = vessel.status === 'Active' ? 'status-active' : 
+                                  vessel.status === 'Maintenance' ? 'status-pending' : 'status-inactive';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vessel.name}</td>
+                    <td>${vessel.type}</td>
+                    <td>${vessel.capacity.toLocaleString()}</td>
+                    <td>${vessel.location}</td>
+                    <td><span class="status ${statusClass}">${vessel.status}</span></td>
+                `;
+                recentVesselsTbody.appendChild(row);
+            });
+            
+            // Render recent cargos
+            const recentCargos = cargos.slice(0, 3);
+            const recentCargosTbody = document.querySelector('#recent-cargos-table tbody');
+            recentCargosTbody.innerHTML = '';
+            
+            recentCargos.forEach(cargo => {
+                const statusClass = cargo.status === 'Booked' ? 'status-active' : 
+                                  cargo.status === 'In Transit' ? 'status-pending' : 
+                                  cargo.status === 'Delivered' ? 'status-active' : 'status-inactive';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>BK${cargo.id.padStart(6, '0')}</td>
+                    <td>${cargo.type}</td>
+                    <td>${cargo.weight}</td>
+                    <td>${cargo.origin}</td>
+                    <td>${cargo.destination}</td>
+                    <td><span class="status ${statusClass}">${cargo.status}</span></td>
+                `;
+                recentCargosTbody.appendChild(row);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tab = e.currentTarget.getAttribute('data-tab');
+                    switchTab(tab);
+                });
+            });
+            
+            // Vessel form
+            document.getElementById('add-vessel-btn').addEventListener('click', () => {
+                openVesselModal();
+            });
+            
+            document.getElementById('vessel-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveVessel();
+            });
+            
+            document.getElementById('close-vessel-modal').addEventListener('click', closeVesselModal);
+            document.getElementById('cancel-vessel').addEventListener('click', closeVesselModal);
+            
+            // Cargo form
+            document.getElementById('add-cargo-btn').addEventListener('click', () => {
+                openCargoModal();
+            });
+            
+            document.getElementById('cargo-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveCargo();
+            });
+            
+            document.getElementById('close-cargo-modal').addEventListener('click', closeCargoModal);
+            document.getElementById('cancel-cargo').addEventListener('click', closeCargoModal);
+            
+            // Operation form
+            document.getElementById('add-operation-btn').addEventListener('click', () => {
+                openOperationModal();
+            });
+            
+            document.getElementById('operation-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveOperation();
+            });
+            
+            document.getElementById('close-operation-modal').addEventListener('click', closeOperationModal);
+            document.getElementById('cancel-operation').addEventListener('click', closeOperationModal);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === vesselModal) closeVesselModal();
+                if (e.target === cargoModal) closeCargoModal();
+                if (e.target === operationModal) closeOperationModal();
+            });
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Update menu links
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.menu-link[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Update tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Vessel functions
+        function openVesselModal(vessel = null) {
+            const title = document.getElementById('vessel-modal-title');
+            const form = document.getElementById('vessel-form');
+            
+            if (vessel) {
+                title.textContent = 'Edit Vessel';
+                document.getElementById('vessel-id').value = vessel.id;
+                document.getElementById('vessel-name').value = vessel.name;
+                document.getElementById('vessel-type').value = vessel.type;
+                document.getElementById('vessel-imo').value = vessel.imo;
+                document.getElementById('vessel-capacity').value = vessel.capacity;
+                document.getElementById('vessel-year').value = vessel.year;
+                document.getElementById('vessel-location').value = vessel.location;
+                document.getElementById('vessel-status').value = vessel.status;
+            } else {
+                title.textContent = 'Register New Vessel';
+                form.reset();
+                document.getElementById('vessel-id').value = '';
+            }
+            
+            vesselModal.style.display = 'flex';
+        }
+
+        function closeVesselModal() {
+            vesselModal.style.display = 'none';
+        }
+
+        function saveVessel() {
+            const id = document.getElementById('vessel-id').value;
+            const name = document.getElementById('vessel-name').value;
+            const type = document.getElementById('vessel-type').value;
+            const imo = document.getElementById('vessel-imo').value;
+            const capacity = document.getElementById('vessel-capacity').value;
+            const year = document.getElementById('vessel-year').value;
+            const location = document.getElementById('vessel-location').value;
+            const status = document.getElementById('vessel-status').value;
+            
+            if (id) {
+                // Update existing vessel
+                const index = vessels.findIndex(v => v.id === id);
+                if (index !== -1) {
+                    vessels[index] = { id, name, type, imo, capacity, year, location, status };
+                }
+            } else {
+                // Add new vessel
+                const newId = generateId();
+                vessels.push({ id: newId, name, type, imo, capacity, year, location, status });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('vessels', JSON.stringify(vessels));
+            
+            // Update UI
+            renderVessels();
+            renderDashboard();
+            
+            // Close modal and show notification
+            closeVesselModal();
+            showToast('Vessel saved successfully');
+        }
+
+        function editVessel(id) {
+            const vessel = vessels.find(v => v.id === id);
+            if (vessel) {
+                openVesselModal(vessel);
+            }
+        }
+
+        function deleteVessel(id) {
+            if (confirm('Are you sure you want to delete this vessel?')) {
+                // Check if vessel has associated cargos or operations
+                const hasCargos = cargos.some(c => c.vesselId === id);
+                const hasOperations = operations.some(o => o.vesselId === id);
+                
+                if (hasCargos || hasOperations) {
+                    showToast('Cannot delete vessel with associated cargos or operations', 'error');
+                    return;
+                }
+                
+                vessels = vessels.filter(v => v.id !== id);
+                localStorage.setItem('vessels', JSON.stringify(vessels));
+                
+                renderVessels();
+                renderDashboard();
+                showToast('Vessel deleted successfully');
+            }
+        }
+
+        // Cargo functions
+        function openCargoModal(cargo = null) {
+            const title = document.getElementById('cargo-modal-title');
+            const form = document.getElementById('cargo-form');
+            const vesselSelect = document.getElementById('cargo-vessel');
+            
+            // Populate vessels dropdown
+            vesselSelect.innerHTML = '<option value="">Select Vessel</option>';
+            vessels.forEach(vessel => {
+                const option = document.createElement('option');
+                option.value = vessel.id;
+                option.textContent = vessel.name;
+                vesselSelect.appendChild(option);
+            });
+            
+            if (cargo) {
+                title.textContent = 'Edit Cargo Booking';
+                document.getElementById('cargo-id').value = cargo.id;
+                document.getElementById('cargo-type').value = cargo.type;
+                document.getElementById('cargo-weight').value = cargo.weight;
+                document.getElementById('cargo-origin').value = cargo.origin;
+                document.getElementById('cargo-destination').value = cargo.destination;
+                document.getElementById('cargo-vessel').value = cargo.vesselId;
+                document.getElementById('cargo-status').value = cargo.status;
+            } else {
+                title.textContent = 'New Cargo Booking';
+                form.reset();
+                document.getElementById('cargo-id').value = '';
+            }
+            
+            cargoModal.style.display = 'flex';
+        }
+
+        function closeCargoModal() {
+            cargoModal.style.display = 'none';
+        }
+
+        function saveCargo() {
+            const id = document.getElementById('cargo-id').value;
+            const type = document.getElementById('cargo-type').value;
+            const weight = document.getElementById('cargo-weight').value;
+            const origin = document.getElementById('cargo-origin').value;
+            const destination = document.getElementById('cargo-destination').value;
+            const vesselId = document.getElementById('cargo-vessel').value;
+            const status = document.getElementById('cargo-status').value;
+            
+            if (id) {
+                // Update existing cargo
+                const index = cargos.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    cargos[index] = { id, type, weight, origin, destination, vesselId, status };
+                }
+            } else {
+                // Add new cargo
+                const newId = generateId();
+                cargos.push({ id: newId, type, weight, origin, destination, vesselId, status });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('cargos', JSON.stringify(cargos));
+            
+            // Update UI
+            renderCargos();
+            renderDashboard();
+            
+            // Close modal and show notification
+            closeCargoModal();
+            showToast('Cargo booking saved successfully');
+        }
+
+        function editCargo(id) {
+            const cargo = cargos.find(c => c.id === id);
+            if (cargo) {
+                openCargoModal(cargo);
+            }
+        }
+
+        function deleteCargo(id) {
+            if (confirm('Are you sure you want to delete this cargo booking?')) {
+                cargos = cargos.filter(c => c.id !== id);
+                localStorage.setItem('cargos', JSON.stringify(cargos));
+                
+                renderCargos();
+                renderDashboard();
+                showToast('Cargo booking deleted successfully');
+            }
+        }
+
+        // Operation functions
+        function openOperationModal(operation = null) {
+            const title = document.getElementById('operation-modal-title');
+            const form = document.getElementById('operation-form');
+            const vesselSelect = document.getElementById('operation-vessel');
+            
+            // Populate vessels dropdown
+            vesselSelect.innerHTML = '<option value="">Select Vessel</option>';
+            vessels.forEach(vessel => {
+                const option = document.createElement('option');
+                option.value = vessel.id;
+                option.textContent = vessel.name;
+                vesselSelect.appendChild(option);
+            });
+            
+            if (operation) {
+                title.textContent = 'Edit Operation';
+                document.getElementById('operation-id').value = operation.id;
+                document.getElementById('operation-vessel').value = operation.vesselId;
+                document.getElementById('operation-type').value = operation.type;
+                document.getElementById('operation-start').value = operation.start;
+                document.getElementById('operation-end').value = operation.end;
+                document.getElementById('operation-status').value = operation.status;
+                document.getElementById('operation-details').value = operation.details || '';
+            } else {
+                title.textContent = 'New Operation';
+                form.reset();
+                document.getElementById('operation-id').value = '';
+            }
+            
+            operationModal.style.display = 'flex';
+        }
+
+        function closeOperationModal() {
+            operationModal.style.display = 'none';
+        }
+
+        function saveOperation() {
+            const id = document.getElementById('operation-id').value;
+            const vesselId = document.getElementById('operation-vessel').value;
+            const type = document.getElementById('operation-type').value;
+            const start = document.getElementById('operation-start').value;
+            const end = document.getElementById('operation-end').value;
+            const status = document.getElementById('operation-status').value;
+            const details = document.getElementById('operation-details').value;
+            
+            if (id) {
+                // Update existing operation
+                const index = operations.findIndex(o => o.id === id);
+                if (index !== -1) {
+                    operations[index] = { id, vesselId, type, start, end, status, details };
+                }
+            } else {
+                // Add new operation
+                const newId = generateId();
+                operations.push({ id: newId, vesselId, type, start, end, status, details });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('operations', JSON.stringify(operations));
+            
+            // Update UI
+            renderOperations();
+            renderDashboard();
+            
+            // Close modal and show notification
+            closeOperationModal();
+            showToast('Operation saved successfully');
+        }
+
+        function editOperation(id) {
+            const operation = operations.find(o => o.id === id);
+            if (operation) {
+                openOperationModal(operation);
+            }
+        }
+
+        function deleteOperation(id) {
+            if (confirm('Are you sure you want to delete this operation?')) {
+                operations = operations.filter(o => o.id !== id);
+                localStorage.setItem('operations', JSON.stringify(operations));
+                
+                renderOperations();
+                renderDashboard();
+                showToast('Operation deleted successfully');
+            }
+        }
+
+        // Utility functions
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDateTime(dateTimeStr) {
+            const date = new Date(dateTimeStr);
+            return date.toLocaleString();
+        }
+
+        function showToast(message, type = 'success') {
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                toast.className = 'toast error';
+                toastIcon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'warning') {
+                toast.className = 'toast warning';
+                toastIcon.className = 'fas fa-exclamation-triangle';
+            } else {
+                toast.className = 'toast';
+                toastIcon.className = 'fas fa-check-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
